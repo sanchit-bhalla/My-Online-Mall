@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import Product,Contact
+from .models import Product,Contact,Orders,OrderUpdate
 from math import ceil
+import json
 # Create your views here.
 
 def index(request):
@@ -42,9 +43,27 @@ def contact(request):
         desc = request.POST.get('desc','')
         contact = Contact(name = name, email = email, phone = phone, desc = desc)
         contact.save()
+
+        # After saving info , we display confirmation msg to user by using javascript.
+        received = True;
+        return render(request,'shop/contact.html',{'received':received, 'query':desc})
     return render(request,'shop/contact.html')
 
 def tracker(request):
+    if request.method == "POST":
+        orderId = request.POST.get('orderId','')
+        email = request.POST.get('email','')
+        try:
+            order = Orders.objects.filter(order_id = orderId, email = email)
+            if len(order)>0:
+                update = OrderUpdate.objects.filter(order_id = orderId)
+                updates = []
+                for item in update:
+                    updates.append({'text':item.update_desc, 'time':item.timestamp})
+                    response = json.dumps(updates)
+                    return HttpResponse(response)
+            else:
+                pass
     return render(request,'shop/tracker.html')
 
 def search(request):
@@ -57,4 +76,29 @@ def prViews(request,myid):
     # product[0] bcz product is in form of list. So to ease rendering we use product[0]
 
 def checkout(request):
+    if request.method == "POST":
+        '''
+            second argument of get is default value if first argument not present
+        '''
+        items_json = request.POST.get('itemsJson','')
+        name = request.POST.get('name','')
+        email = request.POST.get('email','')
+        address = request.POST.get('address1','')+ " " +request.POST.get('address2','')
+        city = request.POST.get('city','')
+        state = request.POST.get('state','')
+        zip_code = request.POST.get('zip_code','')
+        phone = request.POST.get('phone','')
+        order = Orders(items_json=items_json, name=name, email=email, address=address, city=city, state=state, zip_code=zip_code, phone=phone)
+        order.save()
+
+        '''
+            When order is saved one update is pushed at that time . These updates can be viewed
+            by customer in tracker by passing his/her details
+        '''
+        update = OrderUpdate(order_id=order.order_id, update_desc="The order has been placed")
+        update.save()
+
+        thank = True;
+        id = order.order_id
+        return render(request,'shop/checkout.html',{'thank':thank, 'id':id})
     return render(request,'shop/checkout.html')

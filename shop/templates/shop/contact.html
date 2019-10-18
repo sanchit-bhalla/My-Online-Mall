@@ -29,3 +29,12 @@
     </form>
   </div>
 {% endblock %}
+
+{% block js %}
+  <script>
+    {% if received %}
+      alert("Your query : {{ query }} has been successfully recorded . We will reply you soon");
+      document.location = "/shop";
+    {% endif %}
+  </script>
+{% endblock %}

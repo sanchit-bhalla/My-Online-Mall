@@ -1,7 +1,80 @@
 {% extends 'shop/basic.html' %}
 
-{% block title %}Tracker{% endblock %}
+{% block title %} my Online Mall Tracker{% endblock %}
 
 {% block body %}
-  <h2>Tracker of yor items</h2>
+  <div class="container">
+    <div class="col my-4">
+      <h2>Enter your order id and email to track your orders</h2>
+      <div class="col my-4">
+        <form method = "POST" action = '#' id="trackerform">
+          {% csrf_token %}
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="inputname">Name</label>
+              <input type="text" class="form-control" name="orderId" id="orderId" placeholder="Name" required>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="inputEmail4">Email</label>
+              <input type="email" class="form-control" name="email" id="email" placeholder="Email">
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Track Order</button>
+        </form>
+      </div>
+    </div>
+    <div class="col my-4">
+      <h2>Your order status</h2>
+
+      <ul class="list-group" id='items'>
+        <!-- Items are appended here by using javascript . See javascript below in this file -->
+      </ul>
+
+    </div>
+  </div>
+{% endblock %}
+
+
+{% block js %}
+<script>
+
+  // Find out cart item from local storage
+  if(localStorage.getItem('cart') == null){
+    var cart = {};
+  }
+  else{
+    cart = JSON.parse(localStorage.getItem('cart'));
+  }
+  var sum = 0;
+  if ($.isEmptyObject(cart)){
+    // Using some ES-6 features
+    // `` is used by pressing button between tab and esc.
+    mystr = `<h2>Your cart is empty. Please add some items to your cart before checking out!</h2>`
+    $('#items').append(mystr);  // we can also use vanilla js i.e using getElementById.innerHTML
+  }else{
+    for(item in cart){
+      let name = cart[item][1];
+      let qty = cart[item][0];
+      sum = sum + qty;
+      // Using some ES-6 features
+      // `` is used by pressing button between tab and esc.
+      // we can use ${} as we use string f-string in python
+      mystr = `<li class="list-group-item d-flex justify-content-between align-items-center">
+                ${name}
+                <span class="badge badge-primary badge-pill">${qty}</span>
+               </li>`
+      $('#items').append(mystr);  // we can also use vanilla js i.e using getElementById.innerHTML
+    }
+  }
+  document.getElementById('idcart').innerHTML = sum;
+
+  // Setting the value of hidden input tag
+  $('#itemsJson').val(JSON.stringify(cart));  // sets the value to JSON.stringify(cart)
+
+  {% if thank %}
+    alert("Your order has been successfully placed. Your order id is {{ id }}");
+    localStorage.clear(); // Bcz if customer buys the item then it should be removed from cart
+    document.location ='/shop'; // it will redirect to shop page once customer buys the product
+  {% endif %}
+ </script>
 {% endblock %}
