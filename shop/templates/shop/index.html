@@ -18,7 +18,12 @@
       }
 
       body .carousel-indicators{
-        bottom : 0;
+        bottom : -40px;
+      }
+
+      .carousel-indicators li {
+          background-color : #7270fc;
+
       }
 
       body .carousel-control-prev-icon,
@@ -67,6 +72,7 @@
               <img src="/media/{{ i.image }}" class="card-img-top" alt="...">
               <div class="card-body">
                 <h5 class="card-title" id="namepr{{ i.id }}">{{ i.product_name }}</h5>
+                <p class="card-title">Price: <span id="pricepr{{ i.id }}">{{ i.price }}</span></p>
                 <p class="card-text">{{ i.desc|slice:":60" }}...</p>
 
                 <span id="divpr{{ i.id }}" class='divpr'>
@@ -128,7 +134,8 @@
     }else{
       qty = 1;
       name = document.getElementById('name'+ idstr).innerHTML;
-      cart[idstr] = [qty,name];  // i.e key idstr has an array [qty,name] as its corresponding value.
+      price = document.getElementById('price'+ idstr).innerHTML;
+      cart[idstr] = [qty,name,parseInt(price)];  // i.e key idstr has an array [qty,name,price] as its corresponding value.
     }
     updateCart(cart);
     s=0;

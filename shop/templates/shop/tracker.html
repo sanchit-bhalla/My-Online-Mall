@@ -11,8 +11,8 @@
           {% csrf_token %}
           <div class="form-row">
             <div class="form-group col-md-6">
-              <label for="inputname">Name</label>
-              <input type="text" class="form-control" name="orderId" id="orderId" placeholder="Name" required>
+              <label for="inputname">Order Id</label>
+              <input type="text" class="form-control" name="orderId" id="orderId" placeholder="OrderId" required>
             </div>
             <div class="form-group col-md-6">
               <label for="inputEmail4">Email</label>
@@ -25,56 +25,79 @@
     </div>
     <div class="col my-4">
       <h2>Your order status</h2>
+      <div class="col my-4">
+        <ul class="list-group" id='items'>
+          <!-- Items are appended here by using javascript . See javascript below in this file -->
+        </ul>
+      </div>
 
-      <ul class="list-group" id='items'>
-        <!-- Items are appended here by using javascript . See javascript below in this file -->
-      </ul>
-
+      <h2>Your order Details</h2>
+      <div class="col my-4">
+        <ul class="list-group" id='citems'>
+          <!-- Items are appended here by using javascript . See javascript below in this file -->
+        </ul>
+      </div>
     </div>
   </div>
 {% endblock %}
 
-
 {% block js %}
 <script>
 
-  // Find out cart item from local storage
-  if(localStorage.getItem('cart') == null){
-    var cart = {};
-  }
-  else{
-    cart = JSON.parse(localStorage.getItem('cart'));
-  }
-  var sum = 0;
-  if ($.isEmptyObject(cart)){
-    // Using some ES-6 features
-    // `` is used by pressing button between tab and esc.
-    mystr = `<h2>Your cart is empty. Please add some items to your cart before checking out!</h2>`
-    $('#items').append(mystr);  // we can also use vanilla js i.e using getElementById.innerHTML
-  }else{
-    for(item in cart){
-      let name = cart[item][1];
-      let qty = cart[item][0];
-      sum = sum + qty;
-      // Using some ES-6 features
-      // `` is used by pressing button between tab and esc.
-      // we can use ${} as we use string f-string in python
-      mystr = `<li class="list-group-item d-flex justify-content-between align-items-center">
-                ${name}
-                <span class="badge badge-primary badge-pill">${qty}</span>
-               </li>`
-      $('#items').append(mystr);  // we can also use vanilla js i.e using getElementById.innerHTML
-    }
-  }
-  document.getElementById('idcart').innerHTML = sum;
+  $('#trackerform').submit(function(event){
+    $('#items').empty();
+    var formData = {
+      'orderId': $('input[name=orderId]').val(),
+      'email': $('input[name=email]').val(),
+      'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+    };
+    $.ajax({
+      type : 'POST',
+      url : '/shop/tracker/',
+      data : formData,
+      encode : true
+    })
+    .done(function(data){  // data contains updates(description and time)  and order. See views.tracker to get info about data
+      data = JSON.parse(data);
+      updates = data[0]; // now updates cntains updation description and time in JSON
+      if(updates.length > 0 & updates != {}){
+        for(i=0;i<updates.length;i++){
+          let text = updates[i]['text'];
+          let time = updates[i]['time'];
+          // Using some ES-6 features
+          // `` is used by pressing button between tab and esc.
+          // we can use ${} as we use string f-string in python
+          mystr = `<li class="list-group-item d-flex justify-content-between align-items-center">
+                    ${text}
+                    <span class="badge badge-primary badge-pill">${time}</span>
+                   </li>`
+          $('#items').append(mystr);  // we can also use vanilla js i.e using getElementById.innerHTML
+        }
+      }else{
+        mystr = `<li class="list-group-item d-flex justify-content-between align-items-center">
+                  Incorrect OrderId or Email
+                 </li>`
+        $('#items').append(mystr);
+      }
 
-  // Setting the value of hidden input tag
-  $('#itemsJson').val(JSON.stringify(cart));  // sets the value to JSON.stringify(cart)
+      // Show/Fill in order details
+      cart = JSON.parse(data[1]);  // Bcz data[1] is in form of string
+      for(item in cart){
+        let name = cart[item][1];
+        let qty = cart[item][0];
+        // Using some ES-6 features
+        // `` is used by pressing button between tab and esc.
+        // we can use ${} as we use string f-string in python
+        mystr = `<li class="list-group-item d-flex justify-content-between align-items-center">
+                  ${name}
+                  <span class="badge badge-primary badge-pill">${qty}</span>
+                 </li>`
+        $('#citems').append(mystr);  // we can also use vanilla js i.e using getElementById.innerHTML
+      }
+    });
+    event.preventDefault(); // It prevents the default behaviour of form i.e prevents reloading
 
-  {% if thank %}
-    alert("Your order has been successfully placed. Your order id is {{ id }}");
-    localStorage.clear(); // Bcz if customer buys the item then it should be removed from cart
-    document.location ='/shop'; // it will redirect to shop page once customer buys the product
-  {% endif %}
- </script>
+  })
+
+</script>
 {% endblock %}

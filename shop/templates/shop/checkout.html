@@ -12,6 +12,13 @@
           <!-- Items are appended here by using javascript . See javascript below in this file -->
 
         </ul>
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page">
+              <span id='total'><!-- Total price is appended here by using javascript --></span>
+            </li>
+          </ol>
+        </nav>
       </div>
     </div>
     <div class="col my-4">
@@ -76,6 +83,7 @@
     cart = JSON.parse(localStorage.getItem('cart'));
   }
   var sum = 0;
+  var total_bill = 0;
   if ($.isEmptyObject(cart)){
     // Using some ES-6 features
     // `` is used by pressing button between tab and esc.
@@ -85,7 +93,9 @@
     for(item in cart){
       let name = cart[item][1];
       let qty = cart[item][0];
+      let price = cart[item][2];
       sum = sum + qty;
+      total_bill = total_bill + (price * qty);
       // Using some ES-6 features
       // `` is used by pressing button between tab and esc.
       // we can use ${} as we use string f-string in python
@@ -95,6 +105,10 @@
                </li>`
       $('#items').append(mystr);  // we can also use vanilla js i.e using getElementById.innerHTML
     }
+    totalstr = `<h5 class="col my-2">
+                Total bill : Rs. ${total_bill} only
+             </h5>`
+    $('#total').append(totalstr);
   }
   document.getElementById('idcart').innerHTML = sum;
 
