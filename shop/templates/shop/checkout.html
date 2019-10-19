@@ -15,7 +15,9 @@
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb">
             <li class="breadcrumb-item active" aria-current="page">
-              <span id='total'><!-- Total price is appended here by using javascript --></span>
+              <h5 class="col my-2">
+                Total bill : Rs. <span id='total'><!-- Total price is appended here by using javascript --></span> only
+              </h5>
             </li>
           </ol>
         </nav>
@@ -26,8 +28,9 @@
       <form method = "POST" action = '/shop/checkout/'>
         {% csrf_token %}
 
-        <!-- Value of thid=s hidden item is set using javascript below -->
+        <!-- Value of this hidden item is set using javascript below -->
         <input type="hidden" name="itemsJson" id="itemsJson">
+        <input type="hidden" name="amount" id="amount">
 
         <div class="form-row">
           <div class="form-group col-md-6">
@@ -105,12 +108,10 @@
                </li>`
       $('#items').append(mystr);  // we can also use vanilla js i.e using getElementById.innerHTML
     }
-    totalstr = `<h5 class="col my-2">
-                Total bill : Rs. ${total_bill} only
-             </h5>`
-    $('#total').append(totalstr);
+
   }
   document.getElementById('idcart').innerHTML = sum;
+  document.getElementById('total').innerHTML = total_bill;
 
   // Setting the value of hidden input tag
   $('#itemsJson').val(JSON.stringify(cart));  // sets the value to JSON.stringify(cart)
@@ -120,5 +121,8 @@
     localStorage.clear(); // Bcz if customer buys the item then it should be removed from cart
     document.location ='/shop'; // it will redirect to shop page once customer buys the product
   {% endif %}
+
+  // Sets the hidden field value (having id amount) to the total_bill i.e $('#total').html()
+  $('#amount').val($('#total').html())
  </script>
 {% endblock %}

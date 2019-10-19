@@ -1,6 +1,6 @@
 {% extends 'shop/basic.html' %}
 
-{% block title %} My Online Mall {% endblock %}
+{% block title %} Search Items-My Online Mall {% endblock %}
 
 {% block css %}
       .col-md-3{
@@ -162,7 +162,7 @@
           i = i +1;
       }
       popStr = popStr + "</div>";
-      popStr = popStr + "<a href ='/shop/checkout/'> <button class='btn btn-primary' id='checkout'>Checkout</button></a>";
+      popStr = popStr + "<a href ='/shop/checkout/' class='btn btn-primary' id='checkout'>Checkout</a>";
       popStr = popStr + "<button class='btn btn-primary' onclick='clearCart()' id='clearCart'>ClearCart</button>";
       // Pop over to cart when clicked
       document.getElementById("popcart").setAttribute('data-content',popStr);
