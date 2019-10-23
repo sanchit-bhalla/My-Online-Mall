@@ -58,9 +58,10 @@
       encode : true
     })
     .done(function(data){  // data contains updates(description and time)  and order. See views.tracker to get info about data
+      $('#citems').empty();
       data = JSON.parse(data);
-      updates = data[0]; // now updates cntains updation description and time in JSON
-      if(updates.length > 0 & updates != {}){
+      if (data['status'] == 'success'){
+        updates = data['updates']; // now updates cntains updation description and time in JSON
         for(i=0;i<updates.length;i++){
           let text = updates[i]['text'];
           let time = updates[i]['time'];
@@ -73,6 +74,20 @@
                    </li>`
           $('#items').append(mystr);  // we can also use vanilla js i.e using getElementById.innerHTML
         }
+        // Show/Fill in order details
+        cart = JSON.parse(data['itemsJson']);  // Bcz data[1] is in form of string
+        for(item in cart){
+          let name = cart[item][1];
+          let qty = cart[item][0];
+          // Using some ES-6 features
+          // `` is used by pressing button between tab and esc.
+          // we can use ${} as we use string f-string in python
+          mystr = `<li class="list-group-item d-flex justify-content-between align-items-center">
+                    ${name}
+                    <span class="badge badge-primary badge-pill">${qty}</span>
+                   </li>`
+          $('#citems').append(mystr);  // we can also use vanilla js i.e using getElementById.innerHTML
+        }
       }else{
         mystr = `<li class="list-group-item d-flex justify-content-between align-items-center">
                   Incorrect OrderId or Email
@@ -80,20 +95,6 @@
         $('#items').append(mystr);
       }
 
-      // Show/Fill in order details
-      cart = JSON.parse(data[1]);  // Bcz data[1] is in form of string
-      for(item in cart){
-        let name = cart[item][1];
-        let qty = cart[item][0];
-        // Using some ES-6 features
-        // `` is used by pressing button between tab and esc.
-        // we can use ${} as we use string f-string in python
-        mystr = `<li class="list-group-item d-flex justify-content-between align-items-center">
-                  ${name}
-                  <span class="badge badge-primary badge-pill">${qty}</span>
-                 </li>`
-        $('#citems').append(mystr);  // we can also use vanilla js i.e using getElementById.innerHTML
-      }
     });
     event.preventDefault(); // It prevents the default behaviour of form i.e prevents reloading
 
