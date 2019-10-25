@@ -1,31 +1,130 @@
 <!doctype html>
+{% load staticfiles %}
 <html lang="en">
   <head>
     <!-- It will redirect to shop page bcz our main page doesn't look nice -->
     <!-- We place it in head so that it will redirect quickly i.e before this page loads-->
-    <script>
+    <!-- <script>
       window.location = '/shop';
-    </script>
+    </script> -->
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <title>My Online Mall</title>
+    <!-- add Image in title -->
+    <link rel = "icon" href = "static/MyAwesomeCart/cart.png" type = "image/png">
+
+    <style type="text/css">
+    
+      .bgimg {
+          background-image: url('static/MyAwesomeCart/backgroundpic.png');
+          width: 100%;
+          height: 690px;
+      }
+      .anchor_size a{
+        font-size: 1.5em;
+        margin-left: 10px;
+      }
+    </style>
+
   </head>
   <body>
-    <div class="jumbotron">
-      <div class="container">
-        <h1 class="display-3">My Online Mall</h1>
-        <p>
-          Welcome to this website.
-        </p>
-        <a class="btn btn-primary btn-lg" href="/shop" role="button">Start Shopping</a>
-        <a class="btn btn-primary btn-lg" href="/shop" role="button">Go To Blog</a>
+
+    <nav class="navbar navbar-expand-lg navbar-light">
+      <h2 class="ml-2 mr-4 mb-0"><span>
+          <img src="{% static 'MyAwesomeCart/cart.png' %}" style="height: 50px" alt="">
+      </span>My Online Mall</h2>
+
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto anchor_size">
+          <li class="nav-item active">
+            <a class="nav-link" href="/shop">Products <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="/shop/about">About Us</a>
+          </li>
+
+          <li class="nav-item active">
+            <a class="nav-link" href="/blog">Blog</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="/shop/contact">Contact Us</a>
+          </li>
+        </ul>
       </div>
-    </div>
+    </nav>
+      <div class="bgimg">
+        <div class="row justify-content-end align-items-center mx-4">
+          <div class="col-12 col-md-5" style="margin-top: 250px">
+
+            <h1>My Online Mall- Customer's first choice</h1>
+            <p>My Online Mall is the best e-commerce site over the world. It only sells the best quality products at the best discount possible</p>
+            <a class="btn btn-primary btn-lg" href="/shop" role="button">Shop now</a>
+          </div>
+        </div>
+      </div>
+
+      <!--================ Start footer Area  =================-->
+      <footer class="footer mt-5">
+        <div class="footer-area">
+          <div class="container">
+            <div class="row">
+              <div class="col-4">
+                  <h4 class="footer_title large_title">Our Mission</h4>
+                  <p>
+                    Provide the best quality products at the customer's door in the minimum time and the best price.
+                  </p>
+              </div>
+              <div class="col-4">
+                <div class="single-footer-widget tp_widgets">
+                  <h4 class="footer_title">Quick Links</h4>
+                  <ul class="list">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/shop">Shop</a></li>
+                    <li><a href="/blog">Blog</a></li>
+                    <li><a href="/shop/contact">Contact</a></li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="col-4">
+                <div class="single-footer-widget tp_widgets">
+                  <h4 class="footer_title">Contact Us</h4>
+                  <ul class="list">
+                    <li><a href="https://www.facebook.com/">Facebook</a></li>
+                    <li><a href="https://www.twitter.com/" >twitter</a></li>
+                    <li><a href="https://www.youtube.com/watch?v=p1MlSvvuQAs&list=PLT-C0gOShiOZAoalwF82Vo-Owc4TRoUtu">Youtube</a></li>
+                    <li><a href="https://www.instagram.com/">Instagram</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <div class="container">
+            <div class="row d-flex">
+              <p class="col-lg-12 footer-text text-center">
+                Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved
+              </p>
+            </div>
+          </div>
+        </div>
+      </footer>
+      <!--================ End footer Area  =================-->
+
+
+
+
+
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

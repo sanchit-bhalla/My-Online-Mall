@@ -6,7 +6,7 @@ import json
 from django.views.decorators.csrf import csrf_exempt
 #from PayTm import Checksum
 # Create your views here.
-MERCHANT_KEY = 'Your-Merchant-Key-Here'
+MERCHANT_KEY = 'YOUR MERCHANT KEY HERE'
 
 
 def index(request):
@@ -134,19 +134,20 @@ def checkout(request):
         thank = True;
         id = order.order_id
         return render(request,'shop/checkout.html',{'thank':thank, 'id':id})
+
         '''
         # Request the paytm to transfer the amount to your account after payment by user
         param_dict = {
-                 'MID':'WorldP64425807474247',
-                 'ORDER_ID': str(order.order_id),
-                 'TXN_AMOUNT': str(amount),
-                 'CUST_ID': email,
-                'INDUSTRY_TYPE_ID':'Retail',
-                'WEBSITE':'WEBSTAGING',  # WEBSTAGING is used for testing
-                'CHANNEL_ID':'WEB',
-                # CALLBACK_URL is that where paytm will send post request to us
-    	        'CALLBACK_URL':'http://127.0.0.1:8000/shop/handlepayment/',
+            'MID': 'YOUR MERCHANT ID HERE',
+            'ORDER_ID': str(order.order_id),
+            'TXN_AMOUNT': str(amount),
+            'CUST_ID': email,
+            'INDUSTRY_TYPE_ID': 'Retail',
+            'WEBSITE': 'WEBSTAGING',
+            'CHANNEL_ID': 'WEB',
+            'CALLBACK_URL':'http://127.0.0.1:8000/shop/handlerequest/',
         }
+        param_dict['CHECKSUMHASH'] = Checksum.generate_checksum(param_dict, MERCHANT_KEY)
         return render(request, 'shop/paytm.html',{'param_dict':param_dict})
         '''
     return render(request,'shop/checkout.html')
