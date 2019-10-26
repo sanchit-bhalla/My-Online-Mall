@@ -8,6 +8,8 @@ urlpatterns = [
     path("tracker/", views.tracker, name='TrackingStatus'),
     path("search/", views.search, name='Search'),
     path("products/<int:myid>", views.prViews, name='ProductView'),
-    path("checkout/", views.checkout, name='Checkout'),
-    path("handlerequest/", views.handlerequest, name='HandleRequest'),
+    path("checkout/", views.CheckOutView.as_view(), name='Checkout'),
+
+    #                For stripe payment integration
+    path('charge/', views.charge, name='charge'),
 ]

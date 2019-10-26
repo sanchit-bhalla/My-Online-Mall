@@ -1,0 +1,20 @@
+{% extends 'shop/basic.html' %}
+{% block title%} My Online Mall payment message{% endblock %}
+{% block body %}
+<div class="jumbotron">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-6">
+        <h1>Payment done successfully</h1>
+        <h2>Thanks for purchasing items from My Online Mall</h2>
+        <a href="/shop" class="btn btn-primary my-4">Ok</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block js %}
+<script>
+  localStorage.clear();
+</script>
+{% endblock %}
