@@ -6,7 +6,7 @@ class Product(models.Model):
     '''
         AutoField is an IntegerField that automatically increments according to available IDs
     '''
-    product_id = models.AutoField # We dont make it primary key. So django automatically makes
+    product_id = models.AutoField # We dont make it primary key. Sso django automatically makes
                                   # a primary_key by name id
     product_name = models.CharField(max_length = 50)
     category = models.CharField(max_length=50,default="")
